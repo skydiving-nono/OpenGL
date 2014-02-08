@@ -1,10 +1,23 @@
 I am learning OpenGL and creating an implementation of Depth of Field in the realm of 3D graphics.
-I will be working mostly to be have a main implementation completed by May, 2014. As I learn and create, I want to help whoever comes behind me and their life to be easier by being able to see how I learned OpenGL.
+I will be working mostly to be have a main implementation completed by May, 2014. As I learn and create, I want to help whoever comes behind me and his/her life to be easier by being able to see how I learned OpenGL.
 
 Notes:
+In most OpenGL programs, most of the time we will be depending on three sources to pull from.
+OpenGL (Open Graphics Library)
+In programming we have primitive data types. These sort of form the building blocks of making more complex code. In OpenGL we have geometric primitives.
+GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN
+
+GLUT/freeglut
+ -created by Mark Kilgard
+ -GLUT handles the tasks like creating a window on a screen, change the size of the window, allow mouse input, etc.
+ -while GLUT still exists, freeglut is a more up to date version of GLUT
+
+GLEW (openGL Extension Wrangler library)
+-"The OpenGL Extension Wrangler Library (GLEW) is a cross-platform open-source C/C++ extension loading library. GLEW provides efficient run-time mechanisms for determining which OpenGL extensions are supported on the target platform." -glew.sourceforge.net
 
 Sources:
 A SIGGRAPH2013 presentation. link: http://youtu.be/T8gjVbn8VBk "An Introduction to OpenGL Programming"
+Information about GLEW comes from their sourceforge, glew.sourceforge.net
 
 Project Specific Attributes:
 My 'makefile' is, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9. 
