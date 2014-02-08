@@ -1,3 +1,10 @@
-This is a simple program that pretty much does nothing, but this will be where my test OpenGL projects will be.
+I am learning OpenGL and creating an implementation of Depth of Field in the realm of 3D graphics.
+I will be working mostly to be have a main implementation completed by May, 2014. As I learn and create, I want to help whoever comes behind me and their life to be easier by being able to see how I learned OpenGL.
 
-My "makefile" is created to run on my MacBook Pro running Mac OS X 10.9
+Notes:
+
+Sources:
+A SIGGRAPH2013 presentation. link: http://youtu.be/T8gjVbn8VBk "An Introduction to OpenGL Programming"
+
+Project Specific Attributes:
+My 'makefile' is created to 
