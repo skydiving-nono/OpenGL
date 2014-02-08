@@ -7,4 +7,4 @@ Sources:
 A SIGGRAPH2013 presentation. link: http://youtu.be/T8gjVbn8VBk "An Introduction to OpenGL Programming"
 
 Project Specific Attributes:
-My 'makefile' is created to 
+My 'makefile' is, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9. 
