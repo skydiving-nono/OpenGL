@@ -20,4 +20,4 @@ A SIGGRAPH2013 presentation. link: http://youtu.be/T8gjVbn8VBk "An Introduction 
 Information about GLEW comes from their sourceforge, glew.sourceforge.net
 
 Project Specific Attributes:
-My 'makefile' is, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9. 
+My 'Makefile' is, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9. 
