@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FFD7FF90-78DC-4C2A-A82A-66B17B2D7297</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Golden Triangle</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0E1D1CD6-99C8-48DF-AABE-7293B85F0255</key>
+		<string>https://github.com/skydiving-nono/OpenGL.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Golden Triangle/Golden Triangle.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0E1D1CD6-99C8-48DF-AABE-7293B85F0255</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/skydiving-nono/OpenGL.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0E1D1CD6-99C8-48DF-AABE-7293B85F0255</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0E1D1CD6-99C8-48DF-AABE-7293B85F0255</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OpenGL</string>
+		</dict>
+	</array>
+</dict>
+</plist>

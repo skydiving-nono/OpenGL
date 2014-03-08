@@ -403,7 +403,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Golden Triangle/Golden Triangle-Prefix.pch";
 				INFOPLIST_FILE = "Golden Triangle/Golden Triangle-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Golden Triangle";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -416,7 +416,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Golden Triangle/Golden Triangle-Prefix.pch";
 				INFOPLIST_FILE = "Golden Triangle/Golden Triangle-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Golden Triangle";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -437,7 +437,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Golden TriangleTests/Golden TriangleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Golden TriangleTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -455,7 +455,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Golden Triangle/Golden Triangle-Prefix.pch";
 				INFOPLIST_FILE = "Golden TriangleTests/Golden TriangleTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Golden TriangleTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};

@@ -1,0 +1,5 @@
+This is an Xcode template for those working in Xcode. 
+
+By running the file, the code in place runs, which simply draws a blue triangle to the screen.
+
+The simple logic is located in XcodeOpenGL/OpenGL/Template.m
