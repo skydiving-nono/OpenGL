@@ -23,4 +23,5 @@ Information about GLEW comes from their sourceforge, glew.sourceforge.net
 OpenGL Programming Guide, 8th Edition, "The Official Guide to Learning OpenGL", Version 4.3. Dave Shreiner
 
 Project Specific Attributes:
-My 'Makefile' is, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9. 
+My Makefiles will be, by default, created for my personal machine with attributes: Macbook Pro, Mac OS X 10.9.
+Implementation for other platforms is planned
