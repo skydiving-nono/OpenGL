@@ -1,0 +1,8 @@
+This is a hub for basically the source code from a beautiful WikiBook simply titled "OpenGL Programming."
+
+The tutorial handles the basic creation of OpenGL programs and contains extremely helpful information. I just wanted to get the code I have used and modified and put it out there as a reference in case the tutorial is still challenging to others.
+
+The article can be found at: http://en.wikibooks.org/wiki/OpenGL_Programming
+The source code, provided by the authors can be found at: https://gitorious.org/wikibooks-opengl/modern-tutorials/source/0b75884b849e8144899b72097d48f7f034c6d4e4:
+
+The difference between their source code and mine is mine just tweaked a little to behave a little bit better and be more understandable from a more abstract view. 
