@@ -173,17 +173,16 @@ const GLubyte Indices3[] = {
     return returnImage;
 }
 
-const GLfloat DIM = 100.f;
-const GLfloat NEAR = 320.f;
-const GLfloat FAR = 660.f;
+//const GLfloat DIM = 0.0f;
+//const GLfloat NEAR = -.5f;
+//const GLfloat FAR = -1.0f;
 
 - (void) focus {
     int i, j, min, max, count;
     GLfloat scale, dx, dy;
     
-    min = -8; max = -min + 1;
-    count = -2 * min + 1;
-    count *= count;
+    min = -2; max = -min + 1;
+    count = -2 * min + 1; count *= count;
     scale = 2.0f;
     
     CC3GLMatrix *projection = [CC3GLMatrix matrix];
@@ -197,8 +196,10 @@ const GLfloat FAR = 660.f;
             [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
             glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
             [modelView populateFromTranslation:CC3VectorMake(scale * i, scale * j, 0.f)];
-            CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-            [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            
+            CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(focus:)];
+            [self render:(CADisplayLink*) displayLink];
+            printf("focus");
             
         }
     }
@@ -296,7 +297,7 @@ const GLfloat FAR = 660.f;
     
 }
 
-- (void)setupVBOs {
+- (void)vertexBufferObjectInit {
     
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
@@ -324,11 +325,22 @@ const GLfloat FAR = 660.f;
     
 }
 
+const GLfloat DIM = 0.3f;
+const GLfloat NEAR = -4.f;
+const GLfloat FAR = -10.f;
+
 - (void)render:(CADisplayLink*)displayLink {
+    printf("\n\nrender\n\n");
+    int i, j, min, max, count;
+    GLfloat scale, dx, dy;
+    
+    min = -2; max = -min + 1;
+    count = -2 * min + 1; count *= count;
+    scale = 2.0f;
+    
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
-    //glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
     glClearColor(0.4, 0.6, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);        
@@ -340,10 +352,24 @@ const GLfloat FAR = 660.f;
     
     CC3GLMatrix *modelView = [CC3GLMatrix matrix];
 //    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
-[modelView populateFromTranslation:CC3VectorMake(0, 0, -7)];
+[modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
 //    _currentRotation += displayLink.duration * 90;
     [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    
+//    for (j = min; j < max; j++) {
+//        for (i = min; i< max; i++){
+//            dx = scale * i * NEAR/objectDepth;
+//            dy = scale * j * NEAR/objectDepth;
+//            
+//            [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
+//            glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+////            [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
+//            
+//            printf("focus\n");
+//            
+//        }
+//    }
     
     // 1
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
@@ -398,10 +424,147 @@ const GLfloat FAR = 660.f;
     glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+//        }
+//    }
+}
+
+- (void)render2:(CADisplayLink*)displayLink {
+    int counter = 0;
+    printf("render2 call\n");
+    
+    int i, j, min, max, count;
+    GLfloat scale, dx, dy;
+    
+    min = -2; max = -min + 1;
+    count = -2 * min + 1; count *= count;
+    scale = 2.0f;
+    
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    
+    glClearColor(0.4, 0.6, 0.8, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    
+    //comment the next 11 lines and uncomment the others instructed below
+    
+    CC3GLMatrix *projection = [CC3GLMatrix matrix];
+    float h = 4.0f * self.frame.size.height / self.frame.size.width;
+    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
+    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+    
+    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
+    //    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
+    [modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
+    //    _currentRotation += displayLink.duration * 90;
+    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    
+    
+    //uncomment from here until line 488, and lines 560 and 561 for depth of field rendering
+//        for (j = min; j < max; j++) {
+//            for (i = min; i< max; i++){
+//                dx = scale * i * NEAR/objectDepth;
+//                dy = scale * j * NEAR/objectDepth;
+//                
+//                printf("count i: %i\n", i);
+//                printf("count j: %i\n", j);
+//                
+//                CC3GLMatrix *projection = [CC3GLMatrix matrix];
+//                float h = 4.0f * self.frame.size.height / self.frame.size.width;
+//                [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
+////                [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
+////                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
+//                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+//                
+//                CC3GLMatrix *modelView = [CC3GLMatrix matrix];
+//                [modelView populateFromTranslation:CC3VectorMake(0, 0, -5)];
+//                [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
+//                glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+//    
+////                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
+//                
+////                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+////                [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
+////            }
+////        }
+    
+                
+    // 1
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
+    // 2
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _rockTexture);
+    glUniform1i(_textureUniform, 0);
+    
+    // 3
+    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
+    
+    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
+    glBindTexture(GL_TEXTURE_2D, _objectTexture);
+    //glUniform1i(_textureUniform, 0); // unnecc in practice
+    
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+    
+    glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
+    
+    // 4
+    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
+    
+    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
+    glBindTexture(GL_TEXTURE_2D, _floorTexture);
+    //glUniform1i(_textureUniform, 0); // unnecc in practice
+    
+    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+    
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+    
+    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
+    
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
+                if (counter == 24) {
+                    printf("there are %i images to be blended", counter);
+                    exit(0);
+                }
+    counter ++;
+    printf("counter: %i\n", counter);
+                
+                UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+                CGRect rect = [keyWindow bounds];
+                UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
+                CGContextRef context = UIGraphicsGetCurrentContext();
+                [keyWindow.layer renderInContext:context];
+                UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                NSString  *imagePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"~/Desktop/capturedImage.jpg"]];
+                [UIImageJPEGRepresentation(capturedScreen, 0.95) writeToFile:imagePath atomically:YES];
+//            }
+//        }
 }
 
 - (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render2:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    
 }
 
@@ -450,19 +613,17 @@ const GLfloat FAR = 660.f;
         [self setupRenderBuffer];        
         [self frameBufferInit];     
         [self compileShaders];
-        [self setupVBOs];
+        [self vertexBufferObjectInit];
         [self setupDisplayLink];
+//        [self focus];
+//        UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
+//        [self blur:capturedScreen];
         
         _floorTexture = [self setupTexture:@"checkerboard.png"];
         _objectTexture = [self setupTexture:@"duckie.png"];
         _rockTexture = [self setupTexture:@"tile_floor.png"];
     }
     return self;
-}
-
-- (IBAction)blur {
-//    CALayer *layer = [self.ViewController layer];
-    
 }
 
 - (void)dealloc {

@@ -22,18 +22,18 @@
     [self.window addSubview:_glView];
     [self.window makeKeyAndVisible];
     
-    JCRBlurView *blurView = [JCRBlurView new];
-    [blurView setFrame:CGRectMake(0.0f,19.0f,320.0f,568.0f-19.0f)];
-    [self.glView addSubview:blurView];
+//    JCRBlurView *blurView = [JCRBlurView new];
+//    [blurView setFrame:CGRectMake(0.0f,19.0f,320.0f,568.0f-19.0f)];
+//    [self.glView addSubview:blurView];
     
-    UIGraphicsBeginImageContext(screenBounds.size);
-    [self.glView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *newImage = [viewImage stackBlur:8];
-    
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.glView.bounds];
-    imgView.image = newImage;
-    [self.glView addSubview:imgView];
+//    UIGraphicsBeginImageContext(screenBounds.size);
+//    [self.glView.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIImage *newImage = [viewImage stackBlur:8];
+//    
+//    UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.glView.bounds];
+//    imgView.image = newImage;
+//    [self.glView addSubview:imgView];
     
 //    NSLog(@"blur capture");
 //    UIGraphicsBeginImageContext(self.glView.bounds.size);
