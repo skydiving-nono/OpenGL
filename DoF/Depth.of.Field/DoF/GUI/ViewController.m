@@ -437,7 +437,7 @@ const GLfloat FAR = 10.f;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-    scale = 0.05f;
+    scale = 0.1f;
     
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -499,8 +499,8 @@ const GLfloat FAR = 10.f;
             
             
             // 1
-            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
-//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+//            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
+            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
