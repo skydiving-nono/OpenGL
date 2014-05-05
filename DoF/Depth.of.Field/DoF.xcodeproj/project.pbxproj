@@ -30,9 +30,7 @@
 		92919912191297C90008E276 /* iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9291990D191297C90008E276 /* iPad.xib */; };
 		92919913191297C90008E276 /* iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9291990E191297C90008E276 /* iPhone.xib */; };
 		92919914191297C90008E276 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92919910191297C90008E276 /* ViewController.m */; };
-		92919917191297E90008E276 /* JCRBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92919916191297E90008E276 /* JCRBlurView.m */; };
 		929199231912987E0008E276 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929199221912987E0008E276 /* Default-568h@2x.png */; };
-		92BD0EF71912756F00271F5B /* UIImage+StackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BD0EF61912756F00271F5B /* UIImage+StackBlur.m */; };
 		92EDE708191178E2006AD07F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EDE707191178E2006AD07F /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,11 +69,7 @@
 		9291990E191297C90008E276 /* iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = iPhone.xib; path = GUI/iPhone.xib; sourceTree = "<group>"; };
 		9291990F191297C90008E276 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = GUI/ViewController.h; sourceTree = "<group>"; };
 		92919910191297C90008E276 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = GUI/ViewController.m; sourceTree = "<group>"; };
-		92919915191297E90008E276 /* JCRBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCRBlurView.h; sourceTree = "<group>"; };
-		92919916191297E90008E276 /* JCRBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCRBlurView.m; sourceTree = "<group>"; };
 		929199221912987E0008E276 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		92BD0EF51912756F00271F5B /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+StackBlur.h"; path = "../UIImage+StackBlur.h"; sourceTree = "<group>"; };
-		92BD0EF61912756F00271F5B /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+StackBlur.m"; path = "../UIImage+StackBlur.m"; sourceTree = "<group>"; };
 		92EDE707191178E2006AD07F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -193,10 +187,6 @@
 				9291990E191297C90008E276 /* iPhone.xib */,
 				9291990F191297C90008E276 /* ViewController.h */,
 				92919910191297C90008E276 /* ViewController.m */,
-				92919915191297E90008E276 /* JCRBlurView.h */,
-				92919916191297E90008E276 /* JCRBlurView.m */,
-				92BD0EF51912756F00271F5B /* UIImage+StackBlur.h */,
-				92BD0EF61912756F00271F5B /* UIImage+StackBlur.m */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -272,7 +262,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92BD0EF71912756F00271F5B /* UIImage+StackBlur.m in Sources */,
 				35DF644E138C40D500FF9459 /* main.m in Sources */,
 				92919911191297C90008E276 /* AppDelegate.m in Sources */,
 				92919914191297C90008E276 /* ViewController.m in Sources */,
@@ -280,7 +269,6 @@
 				92919908191297780008E276 /* CC3GLMatrix.m in Sources */,
 				9291990A191297780008E276 /* CC3Math.m in Sources */,
 				92919907191297780008E276 /* CC3Foundation.m in Sources */,
-				92919917191297E90008E276 /* JCRBlurView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

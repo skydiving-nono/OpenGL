@@ -5,8 +5,6 @@
 
 
 #import "AppDelegate.h"
-#import "JCRBlurView.h"
-#import "UIImage+StackBlur.h"
 
 @implementation AppDelegate
 
@@ -21,10 +19,6 @@
     self.glView = [[[ViewController alloc] initWithFrame:screenBounds] autorelease];
     [self.window addSubview:_glView];
     [self.window makeKeyAndVisible];
-    
-//    JCRBlurView *blurView = [JCRBlurView new];
-//    [blurView setFrame:CGRectMake(0.0f,19.0f,320.0f,568.0f-19.0f)];
-//    [self.glView addSubview:blurView];
     
 //    UIGraphicsBeginImageContext(screenBounds.size);
 //    [self.glView.layer renderInContext:UIGraphicsGetCurrentContext()];
