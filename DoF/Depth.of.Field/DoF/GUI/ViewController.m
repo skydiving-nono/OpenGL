@@ -72,21 +72,21 @@ const Vertex Walls[] = {
 };
 
 const GLubyte wallIndices[] = {
-    // Front
+    // Back
     0, 1, 2,
     2, 3, 0,
-    // Back
+    // Left
     4, 5, 6,
     6, 7, 4,
-    // Left
+    // Right
     8, 9, 10,
     10, 11, 8,
-    // Right
+    // Top
     12, 13, 14,
     14, 15, 12,
     // Top
-    16, 17, 18,
-    18, 19, 16,
+//    16, 17, 18,
+//    18, 19, 16,
     // Bottom
 //    20, 21, 22,
 //    22, 23, 20
@@ -325,9 +325,9 @@ const GLubyte Indices3[] = {
     
 }
 
-const GLfloat DIM = 0.3f;
-const GLfloat NEAR = -4.f;
-const GLfloat FAR = -10.f;
+const GLfloat DIM = 1.f;
+const GLfloat NEAR = 4.f;
+const GLfloat FAR = 10.f;
 
 - (void)render:(CADisplayLink*)displayLink {
     printf("\n\nrender\n\n");
@@ -437,7 +437,7 @@ const GLfloat FAR = -10.f;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-    scale = 2.0f;
+    scale = 0.05f;
     
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -448,119 +448,129 @@ const GLfloat FAR = -10.f;
     
     //comment the next 11 lines and uncomment the others instructed below
     
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    
-    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-    //    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
-    [modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
-    //    _currentRotation += displayLink.duration * 90;
-    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+//    CC3GLMatrix *projection = [CC3GLMatrix matrix];
+//    float h = 4.0f * self.frame.size.height / self.frame.size.width;
+//    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
+//    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+//    
+//    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
+//    //    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
+//    [modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
+//    //    _currentRotation += displayLink.duration * 90;
+//    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
+//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     
     
     //uncomment from here until line 488, and lines 560 and 561 for depth of field rendering
-//        for (j = min; j < max; j++) {
-//            for (i = min; i< max; i++){
-//                dx = scale * i * NEAR/objectDepth;
-//                dy = scale * j * NEAR/objectDepth;
-//                
-//                printf("count i: %i\n", i);
-//                printf("count j: %i\n", j);
-//                
-//                CC3GLMatrix *projection = [CC3GLMatrix matrix];
-//                float h = 4.0f * self.frame.size.height / self.frame.size.width;
-//                [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
-////                [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
-////                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
-//                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-//                
-//                CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-//                [modelView populateFromTranslation:CC3VectorMake(0, 0, -5)];
-//                [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
-//                glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-//    
-////                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
-//                
-////                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-////                [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
-////            }
-////        }
-    
-                
-    // 1
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    // 2
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, _rockTexture);
-    glUniform1i(_textureUniform, 0);
-    
-    // 3
-    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-    
-    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
-    glBindTexture(GL_TEXTURE_2D, _objectTexture);
-    //glUniform1i(_textureUniform, 0); // unnecc in practice
-    
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    // 4
-    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
-    
-    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
-    glBindTexture(GL_TEXTURE_2D, _floorTexture);
-    //glUniform1i(_textureUniform, 0); // unnecc in practice
-    
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
-    
+    for (j = min; j < max; j++) {
+        for (i = min; i< max; i++){
+            dx = scale * i * NEAR/(objectDepth - 5);
+            dy = scale * j * NEAR/(objectDepth - 5);
+//            dx = 0;
+//            dy = 0;
+            
+            
+            printf("count i: %i\n", i);
+            printf("count j: %i\n", j);
+            
+            CC3GLMatrix *projection = [CC3GLMatrix matrix];
+//            float h = 4.0f * self.frame.size.height / self.frame.size.width;
+//            [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
+            //                [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
+            [projection populateFromFrustumLeft:-DIM + dx
+                                       andRight: DIM + dx
+                                      andBottom:-DIM + dy
+                                         andTop: DIM + dy
+                                        andNear: NEAR
+                                         andFar: FAR];
+            glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+            
+            CC3GLMatrix *modelView = [CC3GLMatrix matrix];
+            [modelView populateFromTranslation:CC3VectorMake(-dx, -dy, -5)];
+            [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
+            glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+            
+            //                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
+            
+            //                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+            //                [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
+            //            }
+            //        }
+            
+            
+            // 1
+            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
+//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+            
+            glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+            
+            // 2
+            glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+            glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+            
+            glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+            
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, _rockTexture);
+            glUniform1i(_textureUniform, 0);
+            
+            // 3
+            glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+            
+            glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
+            
+            //glActiveTexture(GL_TEXTURE0); // unneccc in practice
+            glBindTexture(GL_TEXTURE_2D, _objectTexture);
+            //glUniform1i(_textureUniform, 0); // unnecc in practice
+            
+            glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+            
+            glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+            glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+            glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+            
+            glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
+            
+            // 4
+            glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+            
+            glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
+            
+            //glActiveTexture(GL_TEXTURE0); // unneccc in practice
+            glBindTexture(GL_TEXTURE_2D, _floorTexture);
+            //glUniform1i(_textureUniform, 0); // unnecc in practice
+            
+            glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+            
+            glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+            glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+            glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+            
+            glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
+            
+            //                if (counter == 24) {
+            //                    printf("there are %i images to be blended", counter);
+            //                    exit(0);
+            //                }
+            counter ++;
+            printf("counter: %i\n", counter);
+            
+//            UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+//            CGRect rect = [keyWindow bounds];
+//            UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
+//            CGContextRef context = UIGraphicsGetCurrentContext();
+//            [keyWindow.layer renderInContext:context];
+//            UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
+//            UIGraphicsEndImageContext();
+//            NSString  *imagePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"~/Desktop/capturedImage.jpg"]];
+//            [UIImageJPEGRepresentation(capturedScreen, 0.95) writeToFile:imagePath atomically:YES];
+        }
+    }
     [_context presentRenderbuffer:GL_RENDERBUFFER];
-                if (counter == 24) {
-                    printf("there are %i images to be blended", counter);
-                    exit(0);
-                }
-    counter ++;
-    printf("counter: %i\n", counter);
-                
-                UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-                CGRect rect = [keyWindow bounds];
-                UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
-                CGContextRef context = UIGraphicsGetCurrentContext();
-                [keyWindow.layer renderInContext:context];
-                UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                NSString  *imagePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"~/Desktop/capturedImage.jpg"]];
-                [UIImageJPEGRepresentation(capturedScreen, 0.95) writeToFile:imagePath atomically:YES];
-//            }
-//        }
+    
 }
 
 - (void)setupDisplayLink {
