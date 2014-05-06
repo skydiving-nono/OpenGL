@@ -6,26 +6,15 @@
 
 #import "ViewController.h"
 #import "CC3GLMatrix.h"
+#import "AppDelegate.h"
 
 @implementation ViewController
 
 typedef struct {
     float Position[3];
     float Color[4];
-    float TexCoord[2]; // New
+    float TexCoord[2];
 } Vertex;
-
-/*const Vertex Vertices[] = {
-    {{1, -1, 0}, {1, 0, 0, 1}},
-    {{1, 1, 0}, {0, 1, 0, 1}},
-    {{-1, 1, 0}, {0, 0, 1, 1}},
-    {{-1, -1, 0}, {0, 0, 0, 1}}
-};
-
-const GLubyte Indices[] = {
-     0, 1, 2,
-     2, 3, 0
-};*/
 
 #define TEX_COORD_MAX   4
 #define ZFRONT 0
@@ -33,42 +22,28 @@ const GLubyte Indices[] = {
 
 const Vertex Walls[] = {
     // Back
-    {{1, -1, -2.5},  {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
-    {{1, 1, -2.5},   {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1, 1, -2.5},  {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
-    {{-1, -1, -2.5}, {1, 1, 1, 1}, {0, 0}},
-    // Nothing
-//    {{1, -1, -2},  {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-//    {{-1, -1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-//    {{1, -1, -2},  {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-//    {{-1, 1, -2},  {0, 0, 0, 1}, {0, 0}},
+    {{ 1,   -1,    ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
+    {{ 1,    1,    ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-1,    1,    ZBACK},   {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
+    {{-1,   -1,    ZBACK},   {1, 1, 1, 1},      {0, 0}},
     
     // Left
-    {{-3.5, -6.25, ZFRONT},  {1,1,1,1},  {4, 0}},
-    {{-3.5, 5.8, ZFRONT},   {.5, .5, .5, 1},  {4,4}},
-    {{-1,   1, -2.5},     {1, 1, 1, 1},  {0, 4}},
-    {{-1,   -1, -2.5},    {1, 1, 1, 1},  {0, 0}},
+    {{-3.5, -6.25, ZFRONT},  {1,1,1,1},         {TEX_COORD_MAX, 0}},
+    {{-3.5,  5.8,  ZFRONT},  {.5, .5, .5, 1},   {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-1,    1,    ZBACK},   {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
+    {{-1,   -1,    ZBACK},   {1, 1, 1, 1},      {0, 0}},
+    
     // Right
-    {{1, -1, -2.5},  {1, 1, 1, 1}, {4, 0}},
-    {{1, 1, -2.5},   {1, 1, 1, 1}, {4, 4}},
-    {{3.5, 5.8, ZFRONT},      {.5, .5, .5, 1}, {0, 4}},
-    {{3.5, -6.25, ZFRONT},     {.5, .5, .5, 1}, {0, 0}},
+    {{1,   -1,     ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
+    {{1,    1,     ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{3.5,  5.8,   ZFRONT},  {.5, .5, .5, 1},   {0, TEX_COORD_MAX}},
+    {{3.5, -6.25,  ZFRONT},  {.5, .5, .5, 1},   {0, 0}},
+    
     // Top
-    {{3.5, 5.8, ZFRONT},    {.5, .5, .5, .8},  {0, 0}},
-    {{1, 1, -2.5},          {1, 1, 1, .8},      {0, 0}},
-    {{-1, 1, -2.5},         {1, 1, 1, .8},      {0, 0}},
-    {{-3.5, 5.8, ZFRONT},   {.5, .5, .5, .8},  {0, 0}},
-    
-//    {{-3.5, -6.25, ZFRONT},    {0, 0, 0, .1},  {4, 0}},
-//    {{-3.5, 5.8, ZFRONT},          {0, 0, 0, .5},      {4, 4}},
-//    {{3.5, 5.8, ZFRONT},         {0, 0, 0, .5},      {0, 4}},
-//    {{3.5, -6.25, ZFRONT},   {0, 0, 0, .5},  {0, 0}},
-    
-    // Bottom
-//    {{1, -1, -2.5},      {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
-//    {{3.5, -4.5, ZFRONT},     {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
-//    {{-3.5, -4.5, ZFRONT},    {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
-//    {{-1, -1, -2.5},     {1, 1, 1, 1},      {0, 0}}
+    {{3.5,  5.8,   ZFRONT},  {.5, .5, .5, .8},  {0, 0}},
+    {{1,    1,     ZBACK},   {1, 1, 1, .8},     {0, 0}},
+    {{-1,   1,     ZBACK},   {1, 1, 1, .8},     {0, 0}},
+    {{-3.5, 5.8,   ZFRONT},  {.5, .5, .5, .8},  {0, 0}},
 };
 
 const GLubyte wallIndices[] = {
@@ -172,10 +147,6 @@ const GLubyte Indices3[] = {
     
     return returnImage;
 }
-
-//const GLfloat DIM = 0.0f;
-//const GLfloat NEAR = -.5f;
-//const GLfloat FAR = -1.0f;
 
 - (void) focus {
     int i, j, min, max, count;
@@ -325,108 +296,59 @@ const GLubyte Indices3[] = {
     
 }
 
+
+//while this is a working screenshot method, it does not obtain the glView data
+- (UIImage *) screenshot {
+    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+    CGRect rect = [keyWindow bounds];
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [keyWindow.layer renderInContext:context];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
+-(UIImage *) glBufferScreenshot {
+    NSInteger myDataLength = 320 * 480 * 4;
+    
+    // allocate array and read pixels into it.
+    GLubyte *buffer = (GLubyte *) malloc(myDataLength);
+    glReadPixels(0, 0, 320, 480, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    
+    // gl renders "upside down" so swap top to bottom into new array.
+    // there's gotta be a better way, but this works.
+    GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
+    for(int y = 0; y < 480; y++)
+    {
+        for(int x = 0; x < 320 * 4; x++)
+        {
+            buffer2[(479 - y) * 320 * 4 + x] = buffer[y * 4 * 320 + x];
+        }
+    }
+    
+    // make data provider with data.
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
+    
+    // prep the ingredients
+    int bitsPerComponent = 8;
+    int bitsPerPixel = 32;
+    int bytesPerRow = 4 * 320;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    
+    // make the cgimage
+    CGImageRef imageRef = CGImageCreate(320, 480, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
+    
+    // then make the uiimage from that
+    UIImage *myImage = [UIImage imageWithCGImage:imageRef];
+    return myImage;
+}
+
 const GLfloat DIM = 1.f;
 const GLfloat NEAR = 4.f;
 const GLfloat FAR = 10.f;
-
-- (void)render:(CADisplayLink*)displayLink {
-    printf("\n\nrender\n\n");
-    int i, j, min, max, count;
-    GLfloat scale, dx, dy;
-    
-    min = -2; max = -min + 1;
-    count = -2 * min + 1; count *= count;
-    scale = 2.0f;
-    
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    
-    glClearColor(0.4, 0.6, 0.8, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);        
-    
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
-    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-    
-    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-//    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
-[modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
-//    _currentRotation += displayLink.duration * 90;
-    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
-//    for (j = min; j < max; j++) {
-//        for (i = min; i< max; i++){
-//            dx = scale * i * NEAR/objectDepth;
-//            dy = scale * j * NEAR/objectDepth;
-//            
-//            [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
-//            glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-////            [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
-//            
-//            printf("focus\n");
-//            
-//        }
-//    }
-    
-    // 1
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-        
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    // 2
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));    
-    
-    glActiveTexture(GL_TEXTURE0); 
-    glBindTexture(GL_TEXTURE_2D, _rockTexture);
-    glUniform1i(_textureUniform, 0);
-    
-    // 3
-    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-
-    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
-    glBindTexture(GL_TEXTURE_2D, _objectTexture);
-    //glUniform1i(_textureUniform, 0); // unnecc in practice
-
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-
-    glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    // 4
-    glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
-    
-    //glActiveTexture(GL_TEXTURE0); // unneccc in practice
-    glBindTexture(GL_TEXTURE_2D, _floorTexture);
-    //glUniform1i(_textureUniform, 0); // unnecc in practice
-    
-    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    
-    glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
-    
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
-//        }
-//    }
-}
 
 - (void)render2:(CADisplayLink*)displayLink {
     int counter = 0;
@@ -446,8 +368,8 @@ const GLfloat FAR = 10.f;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     
-    //comment the next 11 lines and uncomment the others instructed below
-    
+
+//comment the next 11 lines and uncomment the others instructed below
 //    CC3GLMatrix *projection = [CC3GLMatrix matrix];
 //    float h = 4.0f * self.frame.size.height / self.frame.size.width;
 //    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
@@ -461,13 +383,10 @@ const GLfloat FAR = 10.f;
 //    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     
     
-    //uncomment from here until line 488, and lines 560 and 561 for depth of field rendering
     for (j = min; j < max; j++) {
         for (i = min; i< max; i++){
-            dx = scale * i * NEAR/(objectDepth - 5);
-            dy = scale * j * NEAR/(objectDepth - 5);
-//            dx = 0;
-//            dy = 0;
+            dx = scale * i * NEAR/(objectDepth - 5); //dx = 0;
+            dy = scale * j * NEAR/(objectDepth - 5); //dy = 0;
             
             
             printf("count i: %i\n", i);
@@ -476,7 +395,7 @@ const GLfloat FAR = 10.f;
             CC3GLMatrix *projection = [CC3GLMatrix matrix];
 //            float h = 4.0f * self.frame.size.height / self.frame.size.width;
 //            [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
-            //                [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
+
             [projection populateFromFrustumLeft:-DIM + dx
                                        andRight: DIM + dx
                                       andBottom:-DIM + dy
@@ -497,10 +416,16 @@ const GLfloat FAR = 10.f;
             //            }
             //        }
             
+//            sleep(1);
+
+            
             
             // 1
-//            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
-            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+            //the first viewport draws 25 scenes to the screen across a 5x5 grid
+            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
+            
+            //the following viewport draws them on top of each other in once scene
+//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -521,9 +446,7 @@ const GLfloat FAR = 10.f;
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
             
-            //glActiveTexture(GL_TEXTURE0); // unneccc in practice
             glBindTexture(GL_TEXTURE_2D, _objectTexture);
-            //glUniform1i(_textureUniform, 0); // unnecc in practice
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
             
@@ -539,9 +462,7 @@ const GLfloat FAR = 10.f;
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
             
-            //glActiveTexture(GL_TEXTURE0); // unneccc in practice
             glBindTexture(GL_TEXTURE_2D, _floorTexture);
-            //glUniform1i(_textureUniform, 0); // unnecc in practice
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
             
@@ -550,26 +471,28 @@ const GLfloat FAR = 10.f;
             glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
             
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
+            [_context presentRenderbuffer:GL_RENDERBUFFER];
             
-            //                if (counter == 24) {
-            //                    printf("there are %i images to be blended", counter);
-            //                    exit(0);
-            //                }
+//            if (counter == 24) {
+//                printf("there are %i images to be blended", counter);
+//                exit(0);
+//            }
             counter ++;
             printf("counter: %i\n", counter);
+//            UIImage *img = [self screenshot];
+            UIImage *img = [self glBufferScreenshot];
             
-//            UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-//            CGRect rect = [keyWindow bounds];
-//            UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
-//            CGContextRef context = UIGraphicsGetCurrentContext();
-//            [keyWindow.layer renderInContext:context];
-//            UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
-//            UIGraphicsEndImageContext();
-//            NSString  *imagePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"~/Desktop/capturedImage.jpg"]];
-//            [UIImageJPEGRepresentation(capturedScreen, 0.95) writeToFile:imagePath atomically:YES];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
+            
+            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+            
+            [UIImagePNGRepresentation(img) writeToFile:filePath atomically:YES];
         }
     }
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+    //Having presentRenderBuffer below has it render all scenes at once after rending them all
+//    [_context presentRenderbuffer:GL_RENDERBUFFER];
+    
     
 }
 
