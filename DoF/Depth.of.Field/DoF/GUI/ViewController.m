@@ -211,24 +211,25 @@ const GLubyte Indices3[] = {
     if (status != GL_FRAMEBUFFER_COMPLETE)
         NSLog(@"error at framebuffer object creation %x", status);
     
-//    GLuint texture;
-//    glGenTextures(1, &texture);
-//    glBindTexture(GL_TEXTURE_2D, texture);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-//    
-//    //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-//    
-//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-//    
-//    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-//    glGenBuffers(1, DrawBuffers);
-//    
-//    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-//        NSLog(@"error loading framebuffer");
-//    
-//    glBindFramebuffer(GL_FRAMEBUFFER, texture);
-//    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, texture);
+    
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error loading texture buffer");
+    
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
 }
 
 - (void)vertexBufferObjectInit {
@@ -487,7 +488,7 @@ const GLfloat FAR = 10.f;
 //            glViewport((x+2) * self.frame.size.width/5, (y+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
             
             //the following viewport draws them on top of each other in once scene
-            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
@@ -539,6 +540,7 @@ const GLfloat FAR = 10.f;
             counter ++;
             printf("counter: %i\n", counter);
 //            UIImage *img = [self screenshot];
+            
 //            UIImage *img = [self glViewScreenshot];
 //            
 //            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -547,10 +549,10 @@ const GLfloat FAR = 10.f;
 //            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
 //            
 //            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
-//            if (counter == 25) {
-//                printf("there are %i images to be blended", counter);
-//                exit(0);
-//            }
+            if (counter == 25) {
+                printf("there are %i images to be blended", counter);
+                exit(0);
+            }
 
         }
     }
