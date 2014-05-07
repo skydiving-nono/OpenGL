@@ -209,6 +209,45 @@ const GLubyte Indices3[] = {
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
 }
 
+- (void)DoFBufferInit2{
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    
+    glGenRenderbuffers(1, &_colorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+    
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error at framebuffer object creation %x", status);
+    
+//    GLuint texture;
+//    glGenTextures(1, &texture);
+//    glBindTexture(GL_TEXTURE_2D, texture);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+//    
+//    //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+//    
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+//    
+//    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+//    glGenBuffers(1, DrawBuffers);
+//    
+//    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+//        NSLog(@"error loading framebuffer");
+//    
+//    glBindFramebuffer(GL_FRAMEBUFFER, texture);
+//    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+}
+
 - (void)vertexBufferObjectInit {
     
     // walls
@@ -517,18 +556,18 @@ const GLfloat FAR = 10.f;
             counter ++;
             printf("counter: %i\n", counter);
 //            UIImage *img = [self screenshot];
-            UIImage *img = [self glViewScreenshot];
-            
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
-            
-            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
-            
-            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
-            if (counter == 25) {
-                printf("there are %i images to be blended", counter);
-                exit(0);
-            }
+//            UIImage *img = [self glViewScreenshot];
+//            
+//            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
+//            
+//            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+//            
+//            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+//            if (counter == 25) {
+//                printf("there are %i images to be blended", counter);
+//                exit(0);
+//            }
 
         }
     }
@@ -584,9 +623,10 @@ const GLfloat FAR = 10.f;
     if (self) {        
         [self layerInit];        
         [self contextInit];    
-        [self depthBufferInit];
-        [self colorBufferInit];
-        [self frameBufferInit];     
+//        [self depthBufferInit];
+//        [self colorBufferInit];
+//        [self frameBufferInit];
+        [self DoFBufferInit2];
         [self compileShaders];
         [self vertexBufferObjectInit];
         [self setupDisplayLink];
