@@ -190,19 +190,22 @@ const GLubyte Indices3[] = {
 }
 
 - (void)DoFBufferInit2{
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    GLuint depthRenderBuffer;
+    glGenRenderbuffers(1, &depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
     
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    GLuint colorRenderBuffer;
+    glGenRenderbuffers(1, &colorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
     
     GLuint framebuffer;
     glGenFramebuffers(1, &framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
     
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -536,18 +539,18 @@ const GLfloat FAR = 10.f;
             counter ++;
             printf("counter: %i\n", counter);
 //            UIImage *img = [self screenshot];
-            UIImage *img = [self glViewScreenshot];
-            
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
-            
-            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
-            
-            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
-            if (counter == 25) {
-                printf("there are %i images to be blended", counter);
-                exit(0);
-            }
+//            UIImage *img = [self glViewScreenshot];
+//            
+//            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
+//            
+//            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+//            
+//            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+//            if (counter == 25) {
+//                printf("there are %i images to be blended", counter);
+//                exit(0);
+//            }
 
         }
     }
