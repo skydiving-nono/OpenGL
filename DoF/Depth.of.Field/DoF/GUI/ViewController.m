@@ -117,37 +117,6 @@ const GLubyte Indices3[] = {
     }
 }
 
-- (void)setupRenderBuffer {
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);        
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];    
-}
-
--(UIImage *)convertViewToImage
-{
-    UIGraphicsBeginImageContext(self.bounds.size);
-    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
-- (UIImage*) blur:(UIImage*)image{
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CIImage *inputImage = [CIImage imageWithCGImage:image.CGImage];
-    
-    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [filter setValue:inputImage forKey:kCIInputImageKey];
-    [filter setValue:[NSNumber numberWithFloat:15.0f] forKey:@"inputRadius"];
-    CIImage *result = [filter valueForKey:kCIOutputImageKey];
-    CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
-    UIImage *returnImage = [UIImage imageWithCGImage:cgImage];
-    CGImageRelease(cgImage);
-    
-    return returnImage;
-}
-
 - (void) focus {
     int i, j, min, max, count;
     GLfloat scale, dx, dy;
@@ -176,6 +145,12 @@ const GLubyte Indices3[] = {
     }
 }
 
+- (void)colorBufferInit {
+    glGenRenderbuffers(1, &_colorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+}
+
 - (void)depthBufferInit {
     glGenRenderbuffers(1, &_depthRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
@@ -188,6 +163,81 @@ const GLubyte Indices3[] = {
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);   
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+}
+
+- (void)DoFBufferInit{
+//    [self frameBufferInit];
+//    [self colorBufferInit];
+//    [self depthBufferInit];
+    
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    
+    GLuint colorRenderBuffer;
+    glGenRenderbuffers(1, &colorRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
+    
+    GLuint depthRenderbuffer;
+    glGenRenderbuffers(1, &depthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error at framebuffer object creation %x", status);
+    
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    
+    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+    glGenBuffers(1, DrawBuffers);
+    
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error loading framebuffer");
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, texture);
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+}
+
+- (void)vertexBufferObjectInit {
+    
+    // walls
+    glGenBuffers(1, &_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Walls), Walls, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(wallIndices), wallIndices, GL_STATIC_DRAW);
+    
+    //object
+    glGenBuffers(1, &_vertexBuffer2);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(objectVertices), objectVertices, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_indexBuffer2);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(objectIndices), objectIndices, GL_STATIC_DRAW);
+    
+    //floor
+    glGenBuffers(1, &_vertexBuffer3);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), floorVertices, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_indexBuffer3);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices3), Indices3, GL_STATIC_DRAW);
+    
 }
 
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
@@ -268,35 +318,6 @@ const GLubyte Indices3[] = {
     
 }
 
-- (void)vertexBufferObjectInit {
-    
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Walls), Walls, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(wallIndices), wallIndices, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_vertexBuffer2);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(objectVertices), objectVertices, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer2);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(objectIndices), objectIndices, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_vertexBuffer3);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), floorVertices, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer3);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices3), Indices3, GL_STATIC_DRAW);
-    
-}
-
-
 //while this is a working screenshot method, it does not obtain the glView data
 - (UIImage *) screenshot {
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
@@ -309,63 +330,86 @@ const GLubyte Indices3[] = {
     return img;
 }
 
--(UIImage *) glBufferScreenshot {
-    NSInteger myDataLength = 320 * 480 * 4;
+-(UIImage *) glViewScreenshot {
+    NSInteger dataArrayLength = 727040;
     
-    // allocate array and read pixels into it.
-    GLubyte *buffer = (GLubyte *) malloc(myDataLength);
-    glReadPixels(0, 0, 320, 480, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    // pixelArray is going to be our buffer reading in all pixel data from glView
+    GLubyte *pixelArray = (GLubyte *) malloc(dataArrayLength);
     
-    // gl renders "upside down" so swap top to bottom into new array.
-    // there's gotta be a better way, but this works.
-    GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
-    for(int y = 0; y < 480; y++)
-    {
-        for(int x = 0; x < 320 * 4; x++)
-        {
-            buffer2[(479 - y) * 320 * 4 + x] = buffer[y * 4 * 320 + x];
-        }
-    }
+    /* pixelArray[] is filled here. glReadPixels is a very convinient function
+     * that reads a block of pixels from the frame buffer. 
+     * glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, 
+     *      GLenum format, GLenum type, GLvoid* data);
+     * x,y - specify window coordingates of first pixel read from frame buffer
+     * width, height - dimentions of pixel rectangle; width, height = 1 indicate one pixel size
+     * format - format of pixel data; I'm choosing normal GL_RGBA
+     * type - specifies type of pixel data
+     * data - returns pixel data, in this case puts data into our array
+     * https://www.opengl.org/sdk/docs/man2/xhtml/glReadPixels.xml
+     */
+    glReadPixels(0, 0, 320, 568, GL_RGBA, GL_UNSIGNED_BYTE, pixelArray);
     
-    // make data provider with data.
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
+    // our image is being rendered upside down for some reason
+    // would it be possible to implement a swap that reversed all of the pixels
+     GLubyte *pixelArray2 = (GLubyte *) malloc(dataArrayLength);
+     for(int y = 0; y < 568; y++)
+     {
+         for(int x = 0; x < 568 * 4; x++)
+         {
+             pixelArray2[(567 - y) * 320 * 4 + x] = pixelArray[y * 4 * 320 + x];
+         }
+     }
     
-    // prep the ingredients
-    int bitsPerComponent = 8;
-    int bitsPerPixel = 32;
-    int bytesPerRow = 4 * 320;
-    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    // DataProvider does exactly what it says it does
+    /* arguments: void info, const void *data, size_t size, callback releaseData
+     * https://developer.apple.com/library/ios/documentation/graphicsimaging/Reference/CGDataProvider/Reference/reference.html
+     */
+    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, pixelArray2, dataArrayLength, NULL);
+    
+    CGColorSpaceRef colorInfo = CGColorSpaceCreateDeviceRGB();
     CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
     
-    // make the cgimage
-    CGImageRef imageRef = CGImageCreate(320, 480, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
+    // Now that all of our data has been produced, we load it into an image
+    /*
+     * CGImageCreate Parameters:
+     * size_t width, size_t height, size_t bitsPerComponent
+     *  size_t bitsPerPixel, siz_t bytesPerRow
+     *  CGColorSpaceRef colorspace,
+     *  CGBitmapInfo bitmapInfo,
+     *  CGDataProviderRef provider,
+     *  const CGFloat decode[],
+     *  bool shouldInterpolate,
+     *  CGColorRenderingIntent intent
+     */
+    CGImageRef reference = CGImageCreate(320, 568, 8, 32, 4*320, colorInfo, bitmapInfo, dataProvider, NULL, YES, renderingIntent);
     
-    // then make the uiimage from that
-    UIImage *myImage = [UIImage imageWithCGImage:imageRef];
-    return myImage;
+    // Once our image has been prepared we produce a UIImage with it and return it
+    UIImage *img = [UIImage imageWithCGImage:reference];
+    UIImage *imgFLIPPED = [UIImage imageWithCGImage:img.CGImage scale:img.scale orientation:UIImageOrientationLeftMirrored];
+    return imgFLIPPED;
 }
 
 const GLfloat DIM = 1.f;
 const GLfloat NEAR = 4.f;
 const GLfloat FAR = 10.f;
 
-- (void)render2:(CADisplayLink*)displayLink {
+- (void)dofRender:(CADisplayLink*)displayLink {
     int counter = 0;
-    printf("render2 call\n");
     
-    int i, j, min, max, count;
+    int x, y, min, max, count;
     GLfloat scale, dx, dy;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-    scale = 0.1f;
+//    scale = 0.1f;
+    scale = 1.f;
     
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     
     glClearColor(0.4, 0.6, 0.8, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     
 
@@ -383,23 +427,19 @@ const GLfloat FAR = 10.f;
 //    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     
     
-    for (j = min; j < max; j++) {
-        for (i = min; i< max; i++){
-            dx = scale * i * NEAR/(objectDepth - 5); //dx = 0;
-            dy = scale * j * NEAR/(objectDepth - 5); //dy = 0;
-            
-            
-            printf("count i: %i\n", i);
-            printf("count j: %i\n", j);
+    for (y = min; y < max; y++) {
+        for (x = min; x< max; x++){
+            dx = scale * x ; //dx = 0;
+            dy = scale * y ; //dy = 0;
             
             CC3GLMatrix *projection = [CC3GLMatrix matrix];
 //            float h = 4.0f * self.frame.size.height / self.frame.size.width;
 //            [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
 
-            [projection populateFromFrustumLeft:-DIM + dx
-                                       andRight: DIM + dx
-                                      andBottom:-DIM + dy
-                                         andTop: DIM + dy
+            [projection populateFromFrustumLeft:-DIM + dx * NEAR/(objectDepth - 5)
+                                       andRight: DIM + dx * NEAR/(objectDepth - 5)
+                                      andBottom:-DIM + dy * NEAR/(objectDepth - 5)
+                                         andTop: DIM + dy * NEAR/(objectDepth - 5)
                                         andNear: NEAR
                                          andFar: FAR];
             glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
@@ -422,10 +462,11 @@ const GLfloat FAR = 10.f;
             
             // 1
             //the first viewport draws 25 scenes to the screen across a 5x5 grid
-            glViewport((i+2) * self.frame.size.width/5, (j+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
+//            glViewport((x+2) * self.frame.size.width/5, (y+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
             
             //the following viewport draws them on top of each other in once scene
-//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -473,21 +514,22 @@ const GLfloat FAR = 10.f;
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
             [_context presentRenderbuffer:GL_RENDERBUFFER];
             
-//            if (counter == 24) {
-//                printf("there are %i images to be blended", counter);
-//                exit(0);
-//            }
             counter ++;
             printf("counter: %i\n", counter);
 //            UIImage *img = [self screenshot];
-            UIImage *img = [self glBufferScreenshot];
+            UIImage *img = [self glViewScreenshot];
             
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
             
-            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
             
-            [UIImagePNGRepresentation(img) writeToFile:filePath atomically:YES];
+            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+            if (counter == 25) {
+                printf("there are %i images to be blended", counter);
+                exit(0);
+            }
+
         }
     }
     //Having presentRenderBuffer below has it render all scenes at once after rending them all
@@ -497,7 +539,7 @@ const GLfloat FAR = 10.f;
 }
 
 - (void)setupDisplayLink {
-    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render2:)];
+    CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(dofRender:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    
 }
 
@@ -543,14 +585,12 @@ const GLfloat FAR = 10.f;
         [self layerInit];        
         [self contextInit];    
         [self depthBufferInit];
-        [self setupRenderBuffer];        
+        [self colorBufferInit];
         [self frameBufferInit];     
         [self compileShaders];
         [self vertexBufferObjectInit];
         [self setupDisplayLink];
-//        [self focus];
-//        UIImage *capturedScreen = UIGraphicsGetImageFromCurrentImageContext();
-//        [self blur:capturedScreen];
+//        [self DoFBufferInit];
         
         _floorTexture = [self setupTexture:@"checkerboard.png"];
         _objectTexture = [self setupTexture:@"duckie.png"];
