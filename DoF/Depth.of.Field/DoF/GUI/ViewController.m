@@ -145,26 +145,6 @@ const GLubyte Indices3[] = {
     }
 }
 
-- (void)colorBufferInit {
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
-}
-
-- (void)depthBufferInit {
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);    
-}
-
-- (void)frameBufferInit {    
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);   
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-}
-
 - (void)DoFBufferInit{
 //    [self frameBufferInit];
 //    [self colorBufferInit];
@@ -556,18 +536,18 @@ const GLfloat FAR = 10.f;
             counter ++;
             printf("counter: %i\n", counter);
 //            UIImage *img = [self screenshot];
-//            UIImage *img = [self glViewScreenshot];
-//            
-//            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
-//            
-//            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
-//            
-//            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
-//            if (counter == 25) {
-//                printf("there are %i images to be blended", counter);
-//                exit(0);
-//            }
+            UIImage *img = [self glViewScreenshot];
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
+            
+            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+            
+            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+            if (counter == 25) {
+                printf("there are %i images to be blended", counter);
+                exit(0);
+            }
 
         }
     }
@@ -622,15 +602,11 @@ const GLfloat FAR = 10.f;
     self = [super initWithFrame:frame];
     if (self) {        
         [self layerInit];        
-        [self contextInit];    
-//        [self depthBufferInit];
-//        [self colorBufferInit];
-//        [self frameBufferInit];
+        [self contextInit];
         [self DoFBufferInit2];
         [self compileShaders];
         [self vertexBufferObjectInit];
         [self setupDisplayLink];
-//        [self DoFBufferInit];
         
         _floorTexture = [self setupTexture:@"checkerboard.png"];
         _objectTexture = [self setupTexture:@"duckie.png"];
