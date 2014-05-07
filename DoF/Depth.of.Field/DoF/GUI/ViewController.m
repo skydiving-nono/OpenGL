@@ -547,7 +547,7 @@ const GLfloat FAR = 10.f;
             if (counter == 25) {
                 printf("there are %i images to be blended", counter);
                 exit(0);
-            } 
+            }
 
         }
     }
