@@ -331,3 +331,40 @@ const GLubyte Indices3[] = {
     }
     return self;
 }
+
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+
+
+- (void) focus {
+    int i, j, min, max, count;
+    GLfloat scale, dx, dy;
+    
+    min = -2; max = -min + 1;
+    count = -2 * min + 1; count *= count;
+    scale = 2.0f;
+    
+    CC3GLMatrix *projection = [CC3GLMatrix matrix];
+    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
+    
+    for (j = min; j < max; j++) {
+        for (i = min; i< max; i++){
+            dx = scale * i * NEAR/objectDepth;
+            dy = scale * j * NEAR/objectDepth;
+        
+            [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
+            glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
+            [modelView populateFromTranslation:CC3VectorMake(scale * i, scale * j, 0.f)];
+            
+            CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(focus:)];
+            [self render:(CADisplayLink*) displayLink];
+            printf("focus");
+            
+        }
+    }
+}

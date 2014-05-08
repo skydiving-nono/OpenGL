@@ -117,121 +117,6 @@ const GLubyte Indices3[] = {
     }
 }
 
-- (void) focus {
-    int i, j, min, max, count;
-    GLfloat scale, dx, dy;
-    
-    min = -2; max = -min + 1;
-    count = -2 * min + 1; count *= count;
-    scale = 2.0f;
-    
-    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-    
-    for (j = min; j < max; j++) {
-        for (i = min; i< max; i++){
-            dx = scale * i * NEAR/objectDepth;
-            dy = scale * j * NEAR/objectDepth;
-        
-            [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
-            glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-            [modelView populateFromTranslation:CC3VectorMake(scale * i, scale * j, 0.f)];
-            
-            CADisplayLink* displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(focus:)];
-            [self render:(CADisplayLink*) displayLink];
-            printf("focus");
-            
-        }
-    }
-}
-
-- (void)DoFBufferInit{
-//    [self frameBufferInit];
-//    [self colorBufferInit];
-//    [self depthBufferInit];
-    
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    
-    GLuint colorRenderBuffer;
-    glGenRenderbuffers(1, &colorRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
-    
-    GLuint depthRenderbuffer;
-    glGenRenderbuffers(1, &depthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
-    
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE)
-        NSLog(@"error at framebuffer object creation %x", status);
-    
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    
-//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-    
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    
-    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-    glGenBuffers(1, DrawBuffers);
-    
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        NSLog(@"error loading framebuffer");
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, texture);
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-}
-
-- (void)DoFBufferInit2{
-    GLuint depthRenderBuffer;
-    glGenRenderbuffers(1, &depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-    
-    GLuint colorRenderBuffer;
-    glGenRenderbuffers(1, &colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
-    
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
-    
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE)
-        NSLog(@"error at framebuffer object creation %x", status);
-    
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-    
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, texture);
-    
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        NSLog(@"error loading texture buffer");
-    
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-}
-
 - (void)vertexBufferObjectInit {
     
     // walls
@@ -341,18 +226,6 @@ const GLubyte Indices3[] = {
     
 }
 
-//while this is a working screenshot method, it does not obtain the glView data
-- (UIImage *) screenshot {
-    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-    CGRect rect = [keyWindow bounds];
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [keyWindow.layer renderInContext:context];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
-
 -(UIImage *) glViewScreenshot {
     NSInteger dataArrayLength = 727040;
     
@@ -413,6 +286,33 @@ const GLubyte Indices3[] = {
     return imgFLIPPED;
 }
 
+- (void)DoFBufferInit{
+    glGenTextures(1, &_colorRenderBuffer);
+    glBindTexture(GL_TEXTURE_2D, _colorRenderBuffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, self.frame.size.width, self.frame.size.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    [_context renderbufferStorage:GL_TEXTURE_2D fromDrawable:_eaglLayer];
+    
+    
+    glGenTextures(1, &_depthRenderBuffer);
+    glBindTexture(GL_TEXTURE_2D, _depthRenderBuffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+
+    
+    glGenFramebuffers(1, &_frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorRenderBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderBuffer, 0);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error at framebuffer object creation %x", status);
+    
+    glViewport(0, -30, self.frame.size.width, self.frame.size.height);
+}
+
 const GLfloat DIM = 1.f;
 const GLfloat NEAR = 4.f;
 const GLfloat FAR = 10.f;
@@ -425,29 +325,14 @@ const GLfloat FAR = 10.f;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-//    scale = 0.1f;
     scale = 1.f;
     
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    glClearColor(0.4, 0.6, 0.8, 1.0);
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-    
-
-//comment the next 11 lines and uncomment the others instructed below
-//    CC3GLMatrix *projection = [CC3GLMatrix matrix];
-//    float h = 4.0f * self.frame.size.height / self.frame.size.width;
-//    [projection populateFromFrustumLeft:-2 andRight:2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
-//    glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-//    
-//    CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-//    //    [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
-//    [modelView populateFromTranslation:CC3VectorMake(0, 0, -3)];
-//    //    _currentRotation += displayLink.duration * 90;
-//    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
-//    glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     
     
     for (y = min; y < max; y++) {
@@ -456,8 +341,6 @@ const GLfloat FAR = 10.f;
             dy = scale * y ; //dy = 0;
             
             CC3GLMatrix *projection = [CC3GLMatrix matrix];
-//            float h = 4.0f * self.frame.size.height / self.frame.size.width;
-//            [projection populateFromFrustumLeft:-2 + dx andRight:2 + dx andBottom:-h/2 + dy andTop:h/2 + dy andNear:4 andFar: 10];
 
             [projection populateFromFrustumLeft:-DIM + dx * NEAR/(objectDepth - 5)
                                        andRight: DIM + dx * NEAR/(objectDepth - 5)
@@ -469,32 +352,23 @@ const GLfloat FAR = 10.f;
             
             CC3GLMatrix *modelView = [CC3GLMatrix matrix];
             [modelView populateFromTranslation:CC3VectorMake(-dx, -dy, -5)];
-            [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-            
-            //                [projection populateFromFrustumLeft:-DIM + dx andRight:DIM + dx andBottom:-DIM + dy andTop:DIM + dy andNear:NEAR andFar:FAR];
-            
-            //                glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
-            //                [modelView populateFromTranslation:CC3VectorMake(0, 0, 0)];
-            //            }
-            //        }
-            
-//            sleep(1);
 
-            
-            
-            // 1
             //the first viewport draws 25 scenes to the screen across a 5x5 grid
 //            glViewport((x+2) * self.frame.size.width/5, (y+2)* self.frame.size.height/5, self.frame.size.width / 5, self.frame.size.height / 5);
             
             //the following viewport draws them on top of each other in once scene
-//            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+            glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    
+            // 1
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
             
-            // 2
+            // beginning of room declaraction
+            
+            // 2 Wall Definition
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             
@@ -504,7 +378,7 @@ const GLfloat FAR = 10.f;
             glBindTexture(GL_TEXTURE_2D, _rockTexture);
             glUniform1i(_textureUniform, 0);
             
-            // 3
+            // 3 Object Definition, incorrect but working
             glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
@@ -513,14 +387,14 @@ const GLfloat FAR = 10.f;
             glBindTexture(GL_TEXTURE_2D, _objectTexture);
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-            
+    
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
             
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
             
-            // 4
+            // 4 Floor Definition, incorrect yet again but working
             glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
@@ -529,17 +403,20 @@ const GLfloat FAR = 10.f;
             glBindTexture(GL_TEXTURE_2D, _floorTexture);
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-            
+    
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
             
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(Indices3)/sizeof(Indices3[0]), GL_UNSIGNED_BYTE, 0);
-            [_context presentRenderbuffer:GL_RENDERBUFFER];
+
+            // end of room declarations
             
+            //glBindBuffer(GL_FRAMEBUFFER, _frameBuffer);<before duckie one with 0 after duckie render
+            //glBind texture2d ( gltexture2d, colorbuffer)
+            
+            [_context presentRenderbuffer:GL_RENDERBUFFER];
             counter ++;
-            printf("counter: %i\n", counter);
-//            UIImage *img = [self screenshot];
             
 //            UIImage *img = [self glViewScreenshot];
 //            
@@ -549,15 +426,16 @@ const GLfloat FAR = 10.f;
 //            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
 //            
 //            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
-            if (counter == 25) {
-                printf("there are %i images to be blended", counter);
-                exit(0);
-            }
+//            if (counter == 25) {
+//                printf("there are %i images to be blended", counter);
+//                exit(0);
+//            }
 
         }
     }
+
     //Having presentRenderBuffer below has it render all scenes at once after rending them all
-//    [_context presentRenderbuffer:GL_RENDERBUFFER];
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
     
     
 }
@@ -608,7 +486,7 @@ const GLfloat FAR = 10.f;
     if (self) {        
         [self layerInit];        
         [self contextInit];
-        [self DoFBufferInit2];
+        [self DoFBufferInit];
         [self compileShaders];
         [self vertexBufferObjectInit];
         [self setupDisplayLink];

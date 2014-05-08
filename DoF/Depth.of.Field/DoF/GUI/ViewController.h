@@ -19,6 +19,7 @@
     GLuint _modelViewUniform;
     float _currentRotation;
     GLuint _depthRenderBuffer;
+    GLuint _frameBuffer;
     
     GLuint _floorTexture;
     GLuint _objectTexture;
@@ -32,6 +33,8 @@
     GLuint _indexBuffer2;
     GLuint _vertexBuffer3;
     GLuint _indexBuffer3;
+    GLuint _vertexBuffer4;
+    GLuint _indexBuffer4;
 }
 
 @end

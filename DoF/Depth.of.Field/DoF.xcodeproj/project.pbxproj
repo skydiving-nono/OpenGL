@@ -32,6 +32,7 @@
 		92919913191297C90008E276 /* iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9291990E191297C90008E276 /* iPhone.xib */; };
 		92919914191297C90008E276 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92919910191297C90008E276 /* ViewController.m */; };
 		929199231912987E0008E276 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929199221912987E0008E276 /* Default-568h@2x.png */; };
+		92E33039191BC6DF0067A356 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E33038191BC6DF0067A356 /* Tools.m */; };
 		92EDE708191178E2006AD07F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EDE707191178E2006AD07F /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,8 @@
 		9291990F191297C90008E276 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = GUI/ViewController.h; sourceTree = "<group>"; };
 		92919910191297C90008E276 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = GUI/ViewController.m; sourceTree = "<group>"; };
 		929199221912987E0008E276 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		92E33037191BC6DF0067A356 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tools.h; path = Tools/Tools.h; sourceTree = "<group>"; };
+		92E33038191BC6DF0067A356 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tools.m; path = Tools/Tools.m; sourceTree = "<group>"; };
 		92EDE707191178E2006AD07F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -140,6 +143,7 @@
 		35DF6446138C40D500FF9459 /* Dof */ = {
 			isa = PBXGroup;
 			children = (
+				92E33036191BC6C10067A356 /* Tools */,
 				352DD49B13D376AD005BA4CC /* Textures */,
 				35DF646F138C79F900FF9459 /* Math */,
 				35DF6461138C44F300FF9459 /* vertexShader.glsl */,
@@ -192,6 +196,15 @@
 				92919910191297C90008E276 /* ViewController.m */,
 			);
 			name = GUI;
+			sourceTree = "<group>";
+		};
+		92E33036191BC6C10067A356 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				92E33037191BC6DF0067A356 /* Tools.h */,
+				92E33038191BC6DF0067A356 /* Tools.m */,
+			);
+			name = Tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +282,7 @@
 				35DF644E138C40D500FF9459 /* main.m in Sources */,
 				92919911191297C90008E276 /* AppDelegate.m in Sources */,
 				92919914191297C90008E276 /* ViewController.m in Sources */,
+				92E33039191BC6DF0067A356 /* Tools.m in Sources */,
 				92919909191297780008E276 /* CC3Kazmath.c in Sources */,
 				92919908191297780008E276 /* CC3GLMatrix.m in Sources */,
 				9291990A191297780008E276 /* CC3Math.m in Sources */,
