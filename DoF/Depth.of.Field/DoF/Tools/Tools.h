@@ -14,4 +14,6 @@
 //
 //-(UIImage*) screenshot;
 
++(void) imageBlend;
+
 @end

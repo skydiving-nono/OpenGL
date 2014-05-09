@@ -7,6 +7,7 @@
 #import "ViewController.h"
 #import "CC3GLMatrix.h"
 #import "AppDelegate.h"
+#import "Tools.h"
 
 @implementation ViewController
 
@@ -90,7 +91,19 @@ const Vertex floorVertices[] = {
 };
 
 const GLubyte Indices3[] = {
-    0,1,2,2,3,0
+    0,1,2,
+    2,3,0
+};
+
+const Vertex blank[] = {
+    {{4, -4, objectDepth}, {1, 1, 1, 1}, {1, 1}},
+    {{4, 4, objectDepth}, {1, 1, 1, 1}, {1, 0}},
+    {{-4, 4, objectDepth}, {1, 1, 1, 1}, {0, 0}},
+    {{-4, -4, objectDepth}, {1, 1, 1, 1}, {0, 1}},
+};
+
+const GLubyte blankI[] = {
+    1, 0, 2, 3
 };
 
 
@@ -145,6 +158,15 @@ const GLubyte Indices3[] = {
     glGenBuffers(1, &_indexBuffer3);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices3), Indices3, GL_STATIC_DRAW);
+    
+    //thing
+    glGenBuffers(1, &_vertexBuffer4);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer4);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(blank), blank, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_indexBuffer4);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer4);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(blankI), blankI, GL_STATIC_DRAW);
     
 }
 
@@ -286,36 +308,133 @@ const GLubyte Indices3[] = {
     return imgFLIPPED;
 }
 
-- (void)DoFBufferInit{
+- (void)colorBufferInit {
     glGenTextures(1, &_colorRenderBuffer);
     glBindTexture(GL_TEXTURE_2D, _colorRenderBuffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, self.frame.size.width, self.frame.size.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     [_context renderbufferStorage:GL_TEXTURE_2D fromDrawable:_eaglLayer];
     
-    
+//    glGenRenderbuffers(1, &_colorRenderBuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+//    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+}
+
+- (void)depthBufferInit {
+    [EAGLContext setCurrentContext:_context];
     glGenTextures(1, &_depthRenderBuffer);
     glBindTexture(GL_TEXTURE_2D, _depthRenderBuffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-
     
+//    glGenRenderbuffers(1, &_depthRenderBuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+}
+
+- (void)frameBufferInit {
     glGenFramebuffers(1, &_frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorRenderBuffer, 0);
+
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderBuffer, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorRenderBuffer, 0);
     
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     
     if (status != GL_FRAMEBUFFER_COMPLETE)
         NSLog(@"error at framebuffer object creation %x", status);
     
-    glViewport(0, -30, self.frame.size.width, self.frame.size.height);
+//    glGenFramebuffers(1, &_frameBuffer);
+//    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderBuffer, 0);
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+//
+//    
+//    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//    if (status != GL_FRAMEBUFFER_COMPLETE)
+//        NSLog(@"error at framebuffer object creation %x", status);
 }
+
+- (void) testBuffer{
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    
+    //    GLuint colorRenderBuffer;
+    glGenRenderbuffers(1, &_colorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, self.frame.size.width, self.frame.size.height);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+    
+    glGenFramebuffers(1, &_frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderBuffer, 0);
+    
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,  self.frame.size.width, self.frame.size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error at framebuffer object creation %x", status);
+    /*****************************************************************************************************************/
+}
+
+- (void)DoFBufferInit{
+
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    
+//    GLuint colorRenderBuffer;
+    glGenRenderbuffers(1, &_colorRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+    
+    glGenFramebuffers(1, &_frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthRenderBuffer, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        NSLog(@"error at framebuffer object creation %x", status);
+//
+//    GLuint texture;
+//    glGenTextures(1, &texture);
+//    glBindTexture(GL_TEXTURE_2D, texture);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 320, 568, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+//    
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+//    
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
+//    
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer);
+//    
+//    glBindFramebuffer(GL_FRAMEBUFFER, texture);
+//    
+//    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+//        NSLog(@"error loading texture buffer");
+    
+    //    glViewport(0, -30, self.frame.size.width, self.frame.size.height);
+}
+
+
 
 const GLfloat DIM = 1.f;
 const GLfloat NEAR = 4.f;
 const GLfloat FAR = 10.f;
+const int sceneDepth = 5;
 
 - (void)dofRender:(CADisplayLink*)displayLink {
     int counter = 0;
@@ -325,12 +444,13 @@ const GLfloat FAR = 10.f;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-    scale = 1.f;
+    scale = .3f;
     
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(0.4, 0.6, 0.8, 1.0);
+//    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     
@@ -339,19 +459,20 @@ const GLfloat FAR = 10.f;
         for (x = min; x< max; x++){
             dx = scale * x ; //dx = 0;
             dy = scale * y ; //dy = 0;
+            glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             
             CC3GLMatrix *projection = [CC3GLMatrix matrix];
 
-            [projection populateFromFrustumLeft:-DIM + dx * NEAR/(objectDepth - 5)
-                                       andRight: DIM + dx * NEAR/(objectDepth - 5)
-                                      andBottom:-DIM + dy * NEAR/(objectDepth - 5)
-                                         andTop: DIM + dy * NEAR/(objectDepth - 5)
+            [projection populateFromFrustumLeft:-DIM + dx * NEAR/(objectDepth - sceneDepth)
+                                       andRight: DIM + dx * NEAR/(objectDepth - sceneDepth)
+                                      andBottom:-DIM + dy * NEAR/(objectDepth - sceneDepth)
+                                         andTop: DIM + dy * NEAR/(objectDepth - sceneDepth)
                                         andNear: NEAR
                                          andFar: FAR];
             glUniformMatrix4fv(_projectionUniform, 1, 0, projection.glMatrix);
             
             CC3GLMatrix *modelView = [CC3GLMatrix matrix];
-            [modelView populateFromTranslation:CC3VectorMake(-dx, -dy, -5)];
+            [modelView populateFromTranslation:CC3VectorMake(-dx, -dy, -sceneDepth)];
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
 
             //the first viewport draws 25 scenes to the screen across a 5x5 grid
@@ -412,30 +533,53 @@ const GLfloat FAR = 10.f;
 
             // end of room declarations
             
-            //glBindBuffer(GL_FRAMEBUFFER, _frameBuffer);<before duckie one with 0 after duckie render
-            //glBind texture2d ( gltexture2d, colorbuffer)
+//            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//            glBindTexture(GL_TEXTURE_2D, _colorRenderBuffer);
+            
+            // rectangle
+//            glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+//            
+//            glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer4);
+//            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer4);
+//                                        //vvtexture herevv
+//            glBindTexture(GL_TEXTURE_2D, _texture);
+//            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//            
+//            glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
+//            
+//            glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+//            glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
+//            glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
+//            
+//            glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
+            //end rectangle
+            
+            glBindFramebuffer(GL_TEXTURE_2D, 0);
+            glBindTexture(GL_TEXTURE_2D, _colorRenderBuffer);
             
             [_context presentRenderbuffer:GL_RENDERBUFFER];
             counter ++;
             
-//            UIImage *img = [self glViewScreenshot];
-//            
-//            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
-//            
-//            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
-//            
-//            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+            UIImage *img = [self glViewScreenshot];
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *dynamicFileName = [NSString stringWithFormat:@"Image%i.png", counter];
+            
+            NSString *imgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:dynamicFileName];
+
+            [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
+
+//            sleep(1);
 //            if (counter == 25) {
-//                printf("there are %i images to be blended", counter);
 //                exit(0);
 //            }
 
         }
+        [Tools imageBlend];
     }
 
     //Having presentRenderBuffer below has it render all scenes at once after rending them all
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+//    [_context presentRenderbuffer:GL_RENDERBUFFER];
     
     
 }
@@ -486,7 +630,11 @@ const GLfloat FAR = 10.f;
     if (self) {        
         [self layerInit];        
         [self contextInit];
-        [self DoFBufferInit];
+//        [self DoFBufferInit];
+//        [self depthBufferInit];
+//        [self colorBufferInit];
+//        [self frameBufferInit];
+        [self testBuffer];
         [self compileShaders];
         [self vertexBufferObjectInit];
         [self setupDisplayLink];
@@ -498,10 +646,8 @@ const GLfloat FAR = 10.f;
     return self;
 }
 
-- (void)dealloc {
-    [_context release];
-    _context = nil;
-    [super dealloc];
-}
-
+//- (void)dealloc {
+//    [imageLoader release];
+//    [super dealloc];
+//}
 @end
