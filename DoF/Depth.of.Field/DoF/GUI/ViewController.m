@@ -444,7 +444,7 @@ const int sceneDepth = 5;
     
     min = -2; max = -min + 1;
     count = -2 * min + 1; count *= count;
-    scale = .3f;
+    scale = .1f;
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -542,7 +542,7 @@ const int sceneDepth = 5;
 //            glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer4);
 //            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer4);
 //                                        //vvtexture herevv
-//            glBindTexture(GL_TEXTURE_2D, _texture);
+//            glBindTexture(GL_TEXTURE_2D, _floorTexture);
 //            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 //            
 //            glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
@@ -646,8 +646,4 @@ const int sceneDepth = 5;
     return self;
 }
 
-//- (void)dealloc {
-//    [imageLoader release];
-//    [super dealloc];
-//}
 @end

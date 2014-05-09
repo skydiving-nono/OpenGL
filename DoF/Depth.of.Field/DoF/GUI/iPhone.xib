@@ -39,8 +39,8 @@
                     <rect key="frame" x="87" y="465" width="118" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </slider>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="&quot;Token&quot; Screen" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LuH-hh-0px">
-                    <rect key="frame" x="101" y="45" width="119" height="21"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LuH-hh-0px">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -53,15 +53,9 @@
         </window>
         <customObject id="ZXG-BF-Pj5" customClass="AppDelegate">
             <connections>
+                <outlet property="label" destination="LuH-hh-0px" id="3v8-bc-Hni"/>
                 <outlet property="window" destination="TLn-tt-qfr" id="qBp-HB-rxy"/>
             </connections>
         </customObject>
-        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="duckie.png" id="JB7-3r-em3">
-            <rect key="frame" x="0.0" y="0.0" width="224" height="284"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-        </imageView>
     </objects>
-    <resources>
-        <image name="duckie.png" width="64" height="64"/>
-    </resources>
 </document>

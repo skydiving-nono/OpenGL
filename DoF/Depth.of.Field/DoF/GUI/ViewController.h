@@ -27,6 +27,7 @@
     GLuint _floorTexture;
     GLuint _objectTexture;
     GLuint _rockTexture;
+    GLuint _extraTexture;
     
     GLuint _texCoordSlot;
     GLuint _textureUniform;

@@ -23,6 +23,7 @@
 		924130F81917518B0021D3A8 /* rock.png in Resources */ = {isa = PBXBuildFile; fileRef = 924130F31917518B0021D3A8 /* rock.png */; };
 		924130F91917518B0021D3A8 /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 924130F41917518B0021D3A8 /* tile_floor.png */; };
 		924BCAF71911F017008C8F7D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 924BCAF61911F017008C8F7D /* CoreImage.framework */; };
+		925095D9191CF29200CFFC7B /* blendedImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 925095D8191CF29200CFFC7B /* blendedImage.png */; };
 		92919907191297780008E276 /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 929198FE191297780008E276 /* CC3Foundation.m */; };
 		92919908191297780008E276 /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 92919900191297780008E276 /* CC3GLMatrix.m */; };
 		92919909191297780008E276 /* CC3Kazmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 92919901191297780008E276 /* CC3Kazmath.c */; };
@@ -33,7 +34,6 @@
 		92919914191297C90008E276 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92919910191297C90008E276 /* ViewController.m */; };
 		929199231912987E0008E276 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929199221912987E0008E276 /* Default-568h@2x.png */; };
 		92E33039191BC6DF0067A356 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E33038191BC6DF0067A356 /* Tools.m */; };
-		92E4FA05191CAA0C004AD505 /* iPhone - Image.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92E4FA04191CAA0C004AD505 /* iPhone - Image.xib */; };
 		92EDE708191178E2006AD07F /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92EDE707191178E2006AD07F /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +57,7 @@
 		924130F31917518B0021D3A8 /* rock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rock.png; path = DoF/Textures/rock.png; sourceTree = SOURCE_ROOT; };
 		924130F41917518B0021D3A8 /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile_floor.png; path = DoF/Textures/tile_floor.png; sourceTree = SOURCE_ROOT; };
 		924BCAF61911F017008C8F7D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		925095D8191CF29200CFFC7B /* blendedImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blendedImage.png; sourceTree = "<group>"; };
 		929198FD191297780008E276 /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3Foundation.h; path = Math/CC3Foundation.h; sourceTree = "<group>"; };
 		929198FE191297780008E276 /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CC3Foundation.m; path = Math/CC3Foundation.m; sourceTree = "<group>"; };
 		929198FF191297780008E276 /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3GLMatrix.h; path = Math/CC3GLMatrix.h; sourceTree = "<group>"; };
@@ -76,7 +77,6 @@
 		929199221912987E0008E276 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		92E33037191BC6DF0067A356 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tools.h; path = Tools/Tools.h; sourceTree = "<group>"; };
 		92E33038191BC6DF0067A356 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tools.m; path = Tools/Tools.m; sourceTree = "<group>"; };
-		92E4FA04191CAA0C004AD505 /* iPhone - Image.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "iPhone - Image.xib"; sourceTree = "<group>"; };
 		92EDE707191178E2006AD07F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -114,6 +114,7 @@
 		35DF6431138C40D500FF9459 = {
 			isa = PBXGroup;
 			children = (
+				925095D8191CF29200CFFC7B /* blendedImage.png */,
 				35DF6446138C40D500FF9459 /* Dof */,
 				35DF643F138C40D500FF9459 /* Frameworks */,
 				35DF643D138C40D500FF9459 /* Products */,
@@ -194,7 +195,6 @@
 				9291990C191297C90008E276 /* AppDelegate.m */,
 				9291990D191297C90008E276 /* iPad.xib */,
 				9291990E191297C90008E276 /* iPhone.xib */,
-				92E4FA04191CAA0C004AD505 /* iPhone - Image.xib */,
 				9291990F191297C90008E276 /* ViewController.h */,
 				92919910191297C90008E276 /* ViewController.m */,
 			);
@@ -260,8 +260,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				925095D9191CF29200CFFC7B /* blendedImage.png in Resources */,
 				35DF644B138C40D500FF9459 /* InfoPlist.strings in Resources */,
-				92E4FA05191CAA0C004AD505 /* iPhone - Image.xib in Resources */,
 				92919912191297C90008E276 /* iPad.xib in Resources */,
 				924130F71917518B0021D3A8 /* fish.png in Resources */,
 				924130F61917518B0021D3A8 /* duckie.png in Resources */,

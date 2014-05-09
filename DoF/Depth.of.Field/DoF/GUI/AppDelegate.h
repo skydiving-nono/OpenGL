@@ -15,4 +15,8 @@
 
 @property (nonatomic, retain) IBOutlet ViewController *glView;
 
+@property (retain, nonatomic) IBOutlet UIImageView *outlet;
+
+@property (retain, nonatomic) IBOutlet UILabel *label;
+
 @end
