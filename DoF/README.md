@@ -22,8 +22,8 @@ This project was initiated for a course Applied Computer Graphics, CSC 4357. Vis
 
 Before:
 
-![alt text](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Depth.of.Field/DoF/Textures/Image13.png)
+![alt text](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Image1.png)
 
 After:
 
-![alt text](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Depth.of.Field/DoF/Textures/blendedImage.png)
+![alt text](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Blend.png)
