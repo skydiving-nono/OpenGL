@@ -8,3 +8,12 @@ What you'll find here are:
 - [My proposal of this project](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Project-Proposal.pdf)
 - [My presentation of a research paper on the topic of Depth of Field](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Midterm%20Paper%20Presentation.pdf)
 - [My companion presentation to the final demonstration of this project](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Final%20Presentation.pdf)
+
+## Course Notes
+
+This project was initiated for a course Applied Computer Graphics, CSC 4357
+[Course Website](http://csc.lsu.edu/~kooima/csc4357/index.html)
+
+## Developer Notes
+
+5/10/14 In order to see desired effects of DoF effect, the application must be run, exited, and run again. The first run creates the image, the second displays this run. 
