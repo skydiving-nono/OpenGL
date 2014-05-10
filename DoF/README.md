@@ -11,7 +11,7 @@ What you'll find here are:
 
 ## Course Notes
 
-This project was initiated for a course Applied Computer Graphics, CSC 4357
+This project was initiated for a course Applied Computer Graphics, CSC 4357.
 [Course Website](http://csc.lsu.edu/~kooima/csc4357/index.html)
 
 ## Developer Notes
