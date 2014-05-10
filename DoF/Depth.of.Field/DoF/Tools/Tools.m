@@ -123,95 +123,95 @@
     oneView.alpha = 1;
     
     UIImageView* twoView = [[UIImageView alloc] initWithImage:two];
-    twoView.alpha = .04;
+    twoView.alpha = .96;
     [oneView addSubview:twoView];
     
     UIImageView* threeView   = [[UIImageView alloc] initWithImage:three];
-    threeView.alpha = .04;
+    threeView.alpha = .92;
     [oneView addSubview:threeView];
     
     UIImageView* fourView   = [[UIImageView alloc] initWithImage:four];
-    fourView.alpha = .04;
+    fourView.alpha = .88;
     [oneView addSubview:fourView];
 
     UIImageView* fiveView   = [[UIImageView alloc] initWithImage:five];
-    fiveView.alpha = .04;
+    fiveView.alpha = .84;
     [oneView addSubview:fiveView];
     
     UIImageView* sixView   = [[UIImageView alloc] initWithImage:six];
-    sixView.alpha = .04;
+    sixView.alpha = .80;
     [oneView addSubview:sixView];
     
     UIImageView* sevenView   = [[UIImageView alloc] initWithImage:seven];
-    sevenView.alpha = .04;
+    sevenView.alpha = .76;
     [oneView addSubview:sevenView];
     
     UIImageView* eightView   = [[UIImageView alloc] initWithImage:eight];
-    eightView.alpha = .04;
+    eightView.alpha = .72;
     [oneView addSubview:eightView];
     
     UIImageView* nineView   = [[UIImageView alloc] initWithImage:nine];
-    nineView.alpha = .04;
+    nineView.alpha = .68;
     [oneView addSubview:nineView];
     
     UIImageView* tenView   = [[UIImageView alloc] initWithImage:ten];
-    tenView.alpha = .04;
+    tenView.alpha = .64;
     [oneView addSubview:tenView];
     
     UIImageView* elevenView   = [[UIImageView alloc] initWithImage:eleven];
-    elevenView.alpha = .04;
+    elevenView.alpha = .60;
     [oneView addSubview:elevenView];
     
     UIImageView* twelveView   = [[UIImageView alloc] initWithImage:twelve];
-    twelveView.alpha = .04;
+    twelveView.alpha = .56;
     [oneView addSubview:twelveView];
     
     UIImageView* thirteenView = [[UIImageView alloc] initWithImage:thirteen];
-    thirteenView.alpha = .04;
+    thirteenView.alpha = .52;
     [oneView addSubview:thirteenView];
     
     UIImageView* fourteenView   = [[UIImageView alloc] initWithImage:fourteen];
-    fourteenView.alpha = .04;
+    fourteenView.alpha = .48;
     [oneView addSubview:fourteenView];
     
     UIImageView* fifteenView = [[UIImageView alloc] initWithImage:fifteen];
-    fifteenView.alpha = .04;
+    fifteenView.alpha = .44;
     [oneView addSubview:fifteenView];
     
     UIImageView* sixteenView   = [[UIImageView alloc] initWithImage:sixteen];
-    sixteenView.alpha = .04;
+    sixteenView.alpha = .40;
     [oneView addSubview:sixteenView];
     
     UIImageView* seventeenView = [[UIImageView alloc] initWithImage:seventeen];
-    seventeenView.alpha = .04;
+    seventeenView.alpha = .36;
     [oneView addSubview:seventeenView];
     
     UIImageView* eightteenView   = [[UIImageView alloc] initWithImage:eighteen];
-    eightteenView.alpha = .04;
+    eightteenView.alpha = .32;
     [oneView addSubview:eightteenView];
     
     UIImageView* nineteenView = [[UIImageView alloc] initWithImage:nineteen];
-    nineteenView.alpha = .04;
+    nineteenView.alpha = .28;
     [oneView addSubview:nineteenView];
     
     UIImageView* twentyView   = [[UIImageView alloc] initWithImage:twenty];
-    twentyView.alpha = .04;
+    twentyView.alpha = .24;
     [oneView addSubview:twentyView];
     
     UIImageView* twentyoneView = [[UIImageView alloc] initWithImage:twentyone];
-    twentyoneView.alpha = .04;
+    twentyoneView.alpha = .20;
     [oneView addSubview:twentyoneView];
     
     UIImageView* twentytwoView   = [[UIImageView alloc] initWithImage:twentytwo];
-    twentytwoView.alpha = .04;
+    twentytwoView.alpha = .16;
     [oneView addSubview:twentytwoView];
     
     UIImageView* twentythreeView = [[UIImageView alloc] initWithImage:twentythree];
-    twentythreeView.alpha = .04;
+    twentythreeView.alpha = .12;
     [oneView addSubview:twentythreeView];
     
     UIImageView* twentyfourView   = [[UIImageView alloc] initWithImage:twentyfour];
-    twentyfourView.alpha = .04;
+    twentyfourView.alpha = .08;
     [oneView addSubview:twentyfourView];
     
     UIImageView* twentyfiveView = [[UIImageView alloc] initWithImage:twentyfive];

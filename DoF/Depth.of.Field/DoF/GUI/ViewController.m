@@ -27,32 +27,29 @@ const GLfloat NEAR = 4.f;
 const GLfloat FAR = 10.f;
 
 const int objectDepth = -2;
-const int sceneDepth = 5;
+const int sceneDepth = 7;
 
 const Vertex Walls[] = {
     // Back
-    {{ 1,   -1,    ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
-    {{ 1,    1,    ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1,    1,    ZBACK},   {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
-    {{-1,   -1,    ZBACK},   {1, 1, 1, 1},      {0, 0}},
-    
+    {{1, -1, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
+    {{1, 1, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-1, 1, ZBACK}, {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
+    {{-1, -1, ZBACK}, {1, 1, 1, 1}, {0, 0}},
     // Left
-    {{-3.5, -6.25, ZFRONT},  {1,1,1,1},         {TEX_COORD_MAX, 0}},
-    {{-3.5,  5.8,  ZFRONT},  {.5, .5, .5, 1},   {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-1,    1,    ZBACK},   {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
-    {{-1,   -1,    ZBACK},   {1, 1, 1, 1},      {0, 0}},
-    
+    {{-3, -2, 0}, {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
+    {{-3, 2, 0}, {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-1, 2, ZBACK}, {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
+    {{-1, -2, ZBACK}, {1, 1, 1, 1}, {0, 0}},
     // Right
-    {{1,   -1,     ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
-    {{1,    1,     ZBACK},   {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{3.5,  5.8,   ZFRONT},  {.5, .5, .5, 1},   {0, TEX_COORD_MAX}},
-    {{3.5, -6.25,  ZFRONT},  {.5, .5, .5, 1},   {0, 0}},
-    
+    {{1, -2, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
+    {{1, 2, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{3, 2, 0}, {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
+    {{3, -2, 0}, {1, 1, 1, 1}, {0, 0}},
     // Top
-    {{3.5,  5.8,   ZFRONT},  {.5, .5, .5, .8},  {0, 0}},
-    {{1,    1,     ZBACK},   {1, 1, 1, .8},     {0, 0}},
-    {{-1,   1,     ZBACK},   {1, 1, 1, .8},     {0, 0}},
-    {{-3.5, 5.8,   ZFRONT},  {.5, .5, .5, .8},  {0, 0}},
+    {{3, 1, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
+    {{3, 2, 0}, {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-3, 2, 0}, {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
+    {{-3, 1, ZBACK}, {1, 1, 1, 1}, {0, 0}}
 };
 
 const GLubyte wallIndices[] = {
@@ -68,12 +65,6 @@ const GLubyte wallIndices[] = {
     // Top
     12, 13, 14,
     14, 15, 12,
-    // Top
-//    16, 17, 18,
-//    18, 19, 16,
-    // Bottom
-//    20, 21, 22,
-//    22, 23, 20
 };
 
 const Vertex objectVertices[] = {
@@ -90,15 +81,15 @@ const GLubyte objectIndices[] = {
 
 
 const Vertex floorVertices[] = {
-    {{1,      -1,  -2.5},     {1, 1, 1, 1},      {TEX_COORD_MAX, 0}},
-    {{3.5,  -6.25,     0},    {1, 1, 1, 1},      {TEX_COORD_MAX, TEX_COORD_MAX}},
-    {{-3.5, -6.25,     0},    {1, 1, 1, 1},      {0, TEX_COORD_MAX}},
-    {{-1,     -1,  -2.5},     {1, 1, 1, 1},      {0, 0}}
+    // Floor
+    {{3, -1, ZBACK}, {1, 1, 1, 1}, {TEX_COORD_MAX, 0}},
+    {{3, -2, 0}, {1, 1, 1, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+    {{-3, -2, 0}, {1, 1, 1, 1}, {0, TEX_COORD_MAX}},
+    {{-3, -1, ZBACK}, {1, 1, 1, 1}, {0, 0}}
 };
 
 const GLubyte floorIndices[] = {
-    0,1,2,
-    2,3,0
+    1,0,2,3
 };
 
 const Vertex extra[] = {
@@ -331,7 +322,7 @@ const GLubyte extraIndices[] = {
     count = -2 * min + 1; count *= count;
     
     // scale is where the visual effect is changed, change to a value like .1f for more detail
-    scale = .7f;
+    scale = .35f;
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -342,7 +333,7 @@ const GLubyte extraIndices[] = {
     
     
     for (y = min; y < max; y++) {
-        for (x = min; x< max; x++){
+        for (x = min; x < max; x++){
             dx = scale * x ; //dx = 0;
             dy = scale * y ; //dy = 0;
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -373,9 +364,7 @@ const GLubyte extraIndices[] = {
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
             
-            /************************************* beginning of room declaraction *************************************/
-            
-            // Wall Definition
+            // Rendering of the walls
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             
@@ -385,24 +374,23 @@ const GLubyte extraIndices[] = {
             glBindTexture(GL_TEXTURE_2D, _rockTexture);
             glUniform1i(_textureUniform, 0);
             
-            // Object Definition, incorrect but working
             glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
             
+            // Rendering of object in the room
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer2);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer2);
             
             glBindTexture(GL_TEXTURE_2D, _objectTexture);
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
+            
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
             
             glDrawElements(GL_TRIANGLE_STRIP, sizeof(objectIndices)/sizeof(objectIndices[0]), GL_UNSIGNED_BYTE, 0);
             
-            // 4 Floor Definition, incorrect yet again but working
-            glDrawElements(GL_TRIANGLES, sizeof(wallIndices)/sizeof(wallIndices[0]), GL_UNSIGNED_BYTE, 0);
+            //
             
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer3);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer3);
@@ -410,7 +398,7 @@ const GLubyte extraIndices[] = {
             glBindTexture(GL_TEXTURE_2D, _floorTexture);
             
             glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    
+            
             glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
             glVertexAttribPointer(_texCoordSlot, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
@@ -457,6 +445,7 @@ const GLubyte extraIndices[] = {
             [UIImagePNGRepresentation(img) writeToFile:imgFilePath atomically:YES];
 
             // stops the program after all images have been created
+//            sleep(1);
 //            if (counter == 25) {
 //                exit(0);
 //            }

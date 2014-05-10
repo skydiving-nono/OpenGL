@@ -16,7 +16,6 @@
 		35DF6460138C427E00FF9459 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DF645F138C427E00FF9459 /* OpenGLES.framework */; };
 		35DF6463138C44F400FF9459 /* vertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 35DF6461138C44F300FF9459 /* vertexShader.glsl */; };
 		35DF6464138C44F400FF9459 /* fragShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 35DF6462138C44F400FF9459 /* fragShader.glsl */; };
-		9202195E191E7B28001E5971 /* blendedImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9202195D191E7B27001E5971 /* blendedImage.png */; };
 		92284E4219188F2500A61986 /* trash.txt in Resources */ = {isa = PBXBuildFile; fileRef = 92284E4119188F2500A61986 /* trash.txt */; };
 		924130F51917518B0021D3A8 /* checkerboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 924130F01917518B0021D3A8 /* checkerboard.png */; };
 		924130F61917518B0021D3A8 /* duckie.png in Resources */ = {isa = PBXBuildFile; fileRef = 924130F11917518B0021D3A8 /* duckie.png */; };
@@ -50,7 +49,6 @@
 		35DF645F138C427E00FF9459 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		35DF6461138C44F300FF9459 /* vertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertexShader.glsl; sourceTree = "<group>"; };
 		35DF6462138C44F400FF9459 /* fragShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragShader.glsl; sourceTree = "<group>"; };
-		9202195D191E7B27001E5971 /* blendedImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blendedImage.png; sourceTree = "<group>"; };
 		92284E4119188F2500A61986 /* trash.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = trash.txt; sourceTree = "<group>"; };
 		924130F01917518B0021D3A8 /* checkerboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkerboard.png; path = DoF/Textures/checkerboard.png; sourceTree = SOURCE_ROOT; };
 		924130F11917518B0021D3A8 /* duckie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = duckie.png; path = DoF/Textures/duckie.png; sourceTree = SOURCE_ROOT; };
@@ -102,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				924130F01917518B0021D3A8 /* checkerboard.png */,
-				9202195D191E7B27001E5971 /* blendedImage.png */,
 				924130F11917518B0021D3A8 /* duckie.png */,
 				924130F21917518B0021D3A8 /* fish.png */,
 				924130F31917518B0021D3A8 /* rock.png */,
@@ -269,7 +266,6 @@
 				924130F81917518B0021D3A8 /* rock.png in Resources */,
 				92919913191297C90008E276 /* iPhone.xib in Resources */,
 				924130F51917518B0021D3A8 /* checkerboard.png in Resources */,
-				9202195E191E7B28001E5971 /* blendedImage.png in Resources */,
 				35DF6464138C44F400FF9459 /* fragShader.glsl in Resources */,
 				924130F91917518B0021D3A8 /* tile_floor.png in Resources */,
 			);
