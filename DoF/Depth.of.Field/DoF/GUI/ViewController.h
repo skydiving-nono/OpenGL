@@ -2,10 +2,10 @@
 //  OpenGLView.h
 //  HelloOpenGL
 //
+//  Created by Anthony Walker
 
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import  <UIKit/UIKit.h>
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 
@@ -17,7 +17,6 @@
     GLuint _colorSlot;
     GLuint _projectionUniform;
     GLuint _modelViewUniform;
-    float _currentRotation;
     
     GLuint _depthRenderBuffer;
     GLuint _frameBuffer;
@@ -32,19 +31,19 @@
     GLuint _texCoordSlot;
     GLuint _textureUniform;
     
-    //
+    // walls
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
     
-    //
+    // object
     GLuint _vertexBuffer2;
     GLuint _indexBuffer2;
     
-    //
+    // floor
     GLuint _vertexBuffer3;
     GLuint _indexBuffer3;
     
-    //
+    // extra
     GLuint _vertexBuffer4;
     GLuint _indexBuffer4;
 }

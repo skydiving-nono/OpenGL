@@ -2,6 +2,7 @@
 //  HelloOpenGLAppDelegate.h
 //  DoF
 //
+//  Created by Anthony Walker
 
 
 #import <UIKit/UIKit.h>

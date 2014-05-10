@@ -2,12 +2,20 @@
 //  Tools.m
 //  DoF
 //
+//  Created by Anthony Walker
+//
+//  Tools is a hopefully useful tool that can be called in a wide array of situations in iOS.
+//  After more development on these tools I plan on releasing them separately.
 
 
 #import "Tools.h"
 
 @implementation Tools
 
+   /*
+    *  imageBlend is a self-contained method that does the blending of images. In this particular
+    *   instance the blending of 25 dynamically created images.
+    */
 + (void) imageBlend{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -214,13 +222,70 @@
     [oneView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage* blendedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    //            [subView release];
-    //            [imageView release];
-    
     NSString *mergedImage = [NSString stringWithFormat:@"Blend.png"];
     
     NSString *newImgFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:mergedImage];
     [UIImagePNGRepresentation(blendedImage) writeToFile:newImgFilePath atomically:YES];
+}
+
++ (UIImage *) glViewScreenshot {
+    NSInteger dataArrayLength = 727040;
+    
+    // pixelArray is going to be our buffer reading in all pixel data from glView
+    GLubyte *pixelArray = (GLubyte *) malloc(dataArrayLength);
+    
+    /* pixelArray[] is filled here. glReadPixels is a very convinient function
+     * that reads a block of pixels from the frame buffer.
+     * glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
+     *      GLenum format, GLenum type, GLvoid* data);
+     * x,y - specify window coordingates of first pixel read from frame buffer
+     * width, height - dimentions of pixel rectangle; width, height = 1 indicate one pixel size
+     * format - format of pixel data; I'm choosing normal GL_RGBA
+     * type - specifies type of pixel data
+     * data - returns pixel data, in this case puts data into our array
+     * https://www.opengl.org/sdk/docs/man2/xhtml/glReadPixels.xml
+     */
+    glReadPixels(0, 0, 320, 568, GL_RGBA, GL_UNSIGNED_BYTE, pixelArray);
+    
+    // our image is being rendered upside down for some reason
+    // would it be possible to implement a swap that reversed all of the pixels
+    GLubyte *pixelArray2 = (GLubyte *) malloc(dataArrayLength);
+    for(int y = 0; y < 568; y++)
+    {
+        for(int x = 0; x < 568 * 4; x++)
+        {
+            pixelArray2[(567 - y) * 320 * 4 + x] = pixelArray[y * 4 * 320 + x];
+        }
+    }
+    
+    // DataProvider does exactly what it says it does
+    /* arguments: void info, const void *data, size_t size, callback releaseData
+     * https://developer.apple.com/library/ios/documentation/graphicsimaging/Reference/CGDataProvider/Reference/reference.html
+     */
+    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, pixelArray2, dataArrayLength, NULL);
+    
+    CGColorSpaceRef colorInfo = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    
+    // Now that all of our data has been produced, we load it into an image
+    /*
+     * CGImageCreate Parameters:
+     * size_t width, size_t height, size_t bitsPerComponent
+     *  size_t bitsPerPixel, siz_t bytesPerRow
+     *  CGColorSpaceRef colorspace,
+     *  CGBitmapInfo bitmapInfo,
+     *  CGDataProviderRef provider,
+     *  const CGFloat decode[],
+     *  bool shouldInterpolate,
+     *  CGColorRenderingIntent intent
+     */
+    CGImageRef reference = CGImageCreate(320, 568, 8, 32, 4*320, colorInfo, bitmapInfo, dataProvider, NULL, YES, renderingIntent);
+    
+    // Once our image has been prepared we produce a UIImage with it and return it
+    UIImage *img = [UIImage imageWithCGImage:reference];
+    UIImage *imgFLIPPED = [UIImage imageWithCGImage:img.CGImage scale:img.scale orientation:UIImageOrientationLeftMirrored];
+    return imgFLIPPED;
 }
 
 @end

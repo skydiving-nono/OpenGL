@@ -2,9 +2,9 @@
 //  Tools.h
 //  DoF
 //
-//  Created by Anthony Walker on 5/8/14.
 //
-//
+//  Created by Anthony Walker
+
 
 #import <Foundation/Foundation.h>
 
@@ -14,6 +14,7 @@
 //
 //-(UIImage*) screenshot;
 
-+(void) imageBlend;
++ (void) imageBlend;
++ (UIImage *) glViewScreenshot;
 
 @end
