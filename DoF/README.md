@@ -4,7 +4,7 @@ This project is an implementation of the Depth of Field effect being rendered on
 
 What you'll find here:
 
-- Total xCode project containing all files needed to compile and run [(download)](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Depth.of.Field/Depth.of.Field.zip)
+- Total xCode project containing all files needed to compile and run [(download) ](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Depth.of.Field/Depth.of.Field.zip)
 - My proposal of this project [(download)](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Project-Proposal.pdf)
 - My presentation of a research paper on the topic of Depth of Field [(download)](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Midterm%20Paper%20Presentation.pdf)
 - My companion presentation to the final demonstration of this project [(download)](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Final%20Presentation.pdf)
