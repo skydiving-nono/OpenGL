@@ -16,4 +16,12 @@ This project was initiated for a course Applied Computer Graphics, CSC 4357. Vis
 
 ## Developer Notes
 
-**5/10/14** In order to see desired effects of DoF effect, the application must be run, exited, and run again. The first run creates the image, the second displays this run. 
+**5/10/14** In order to see desired effects of DoF effect, the application must be run, exited, and run again. The first run creates the image, the second displays this run.
+
+## Screenshots
+
+Before:
+
+After:
+
+![alt text](https://github.com/skydiving-nono/OpenGL/raw/master/DoF/Depth.of.Field/DoF/Textures/blendedImage.png))
